@@ -40,9 +40,6 @@ int main(int argc, char **argv) {
 	ros::Subscriber propulsionSubscriber = n.subscribe(
 			"/multiplexed_propulsion", 10, propulsionCallback);
 
-	//ros::Subscriber propulsionSubscriber = n.subscribe(
-	//			"/costmap_2d/grid", 1000, mapCallback);
-
 	ros::Subscriber mapSubscriber = n.subscribe("/map", 10, mapCallback);
 
 	ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("/odom_combined", 10); //odom_combined
