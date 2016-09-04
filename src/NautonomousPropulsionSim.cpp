@@ -10,6 +10,9 @@ double vx = 0;
 double vy = 0;
 double vth = 0;
 
+/*
+ * If the propulsion topic arrives, read message and set the velocity x, y, th for the robot.
+ */
 void propulsionCallback(const geometry_msgs::Twist::ConstPtr& twist) {
 	nautonomous_twist.linear.x = twist->linear.x;
 	nautonomous_twist.linear.y = twist->linear.y;
@@ -25,6 +28,9 @@ void propulsionCallback(const geometry_msgs::Twist::ConstPtr& twist) {
 
 }
 
+/*
+ * Updates the map, with the grid and meta data from the message
+ */
 void mapCallback(const nav_msgs::OccupancyGrid::ConstPtr& occupancy) {
 	nautonomous_occupancy_grid.data = occupancy->data;
 	nautonomous_occupancy_grid.header = occupancy->header;
@@ -36,7 +42,8 @@ int main(int argc, char **argv) {
 	ros::init(argc, argv, "nautonomous_propulsion_sim");
 
 	ros::NodeHandle n;
-
+	
+	//Topics to subscribe to, multiplexed propulsion and the dimensions of the map.
 	ros::Subscriber propulsionSubscriber = n.subscribe(
 			"/multiplexed_propulsion", 10, propulsionCallback);
 
@@ -46,6 +53,7 @@ int main(int argc, char **argv) {
 
 	tf::TransformBroadcaster odom_broadcaster;
 
+	//Position of the robot
 	double x = 0.0;//629267.0;
 	double y = 0.0;//5807159.0;
 	double th = 0.0;
