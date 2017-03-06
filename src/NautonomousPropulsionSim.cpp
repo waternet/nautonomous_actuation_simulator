@@ -10,6 +10,8 @@ double vx = 0;
 double vy = 0;
 double vth = 0;
 
+//Tsd
+
 /*
  * If the propulsion topic arrives, read message and set the velocity x, y, th for the robot.
  */
