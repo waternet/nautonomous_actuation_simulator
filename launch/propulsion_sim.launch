@@ -2,5 +2,6 @@
 	  <arg name="log" default="false"/>
 
 	<node name="propulsion_sim" pkg="nautonomous_actuation_simulator" type="nautonomous_propulsion_sim" output="screen">
+
 	</node>
 </launch>

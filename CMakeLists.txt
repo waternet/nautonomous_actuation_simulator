@@ -114,7 +114,11 @@ catkin_package(
 include_directories(${catkin_INCLUDE_DIRS})
 
 ## Declare a C++ executable
+<<<<<<< HEAD
 add_executable(nautonomous_propulsion_sim src/NautonomousPropulsionSim.cpp)
+=======
+add_executable(propulsion_simulator_node src/propulsion_simulator_node.cpp)
+>>>>>>> f2b3e9233192bd3fbbd93453faceb2cde8cccdf8
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -125,7 +129,11 @@ add_executable(nautonomous_propulsion_sim src/NautonomousPropulsionSim.cpp)
 #add_library(operatorros			src/OperatorROS.cpp )
 
 ## Specify libraries to link a library or executable target against
+<<<<<<< HEAD
  target_link_libraries(nautonomous_propulsion_sim
+=======
+ target_link_libraries(propulsion_simulator_node
+>>>>>>> f2b3e9233192bd3fbbd93453faceb2cde8cccdf8
    ${catkin_LIBRARIES} 
  )
 
