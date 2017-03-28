@@ -10,10 +10,10 @@ double vx = 0;
 double vy = 0;
 double vth = 0;
 
-//Tsd
-
-/*
- * If the propulsion topic arrives, read message and set the velocity x, y, th for the robot.
+/**
+ *\brief If the propulsion topic arrives, read message and set the velocity x, y, th for the robot.
+ *\param geometry_msgs::Twist twist
+ *\return 
  */
 void propulsionCallback(const geometry_msgs::Twist::ConstPtr& twist) {
 	nautonomous_twist.linear.x = twist->linear.x;
@@ -30,14 +30,22 @@ void propulsionCallback(const geometry_msgs::Twist::ConstPtr& twist) {
 
 }
 
-/*
- * Updates the map, with the grid and meta data from the message
+/**
+ *\brief Updates the map, with the grid and meta data from the message
+ *\param nav_msgs::OccupancyGrid occupancy
+ *\return
  */
 void mapCallback(const nav_msgs::OccupancyGrid::ConstPtr& occupancy) {
 	nautonomous_occupancy_grid.data = occupancy->data;
 	nautonomous_occupancy_grid.header = occupancy->header;
 	nautonomous_occupancy_grid.info = occupancy->info;
 }
+
+/**
+ *\brief Main for propulsion_sim node. Subscribes and advertise topics. Constant updating map 
+ *\param
+ *\return
+ */
 
 int main(int argc, char **argv) {
 
@@ -67,10 +75,10 @@ int main(int argc, char **argv) {
     	ros::Rate r(15);
 	while (n.ok()) {
 
-		ros::spinOnce();               // check for incoming messages
+		ros::spinOnce();               /// check for incoming messages
 		current_time = ros::Time::now();
 
-		//compute odometry in a typical way given the velocities of the robot
+		/// compute odometry in a typical way given the velocities of the robot
 		double dt = (current_time - last_time).toSec();
 		double delta_x = (vx * cos(th) - vy * sin(th)) * dt;
 		double delta_y = (vx * sin(th) + vy * cos(th)) * dt;

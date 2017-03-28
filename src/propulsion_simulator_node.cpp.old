@@ -1,6 +1,6 @@
 #include "../include/nautonomous_actuation_simulator/propulsion_simulator_node.hpp"
 
-/*
+/**
  * If the propulsion topic arrives, read message and set the velocity x, y, th for the robot.
  */
 void propulsionCallback(const geometry_msgs::Twist::ConstPtr& twist) {
