@@ -117,26 +117,26 @@ int main(int argc, char **argv) {
 		double degrees = (theta * 180.0 / M_PI);
 
 		//x and y to index the occupancy grid map.
-		if(nautonomous_occupancy_grid.info.height){
-			int index_x = (position_x - nautonomous_occupancy_grid.info.origin.position.x)
-							/ nautonomous_occupancy_grid.info.resolution;
-			int index_y = (position_y - nautonomous_occupancy_grid.info.origin.position.y)
-					/ nautonomous_occupancy_grid.info.resolution;
-			//ROS_INFO("(%4.2f, %4.2f | %4.2f [%4.2f]) is index (%d, %d)", x, y, th, degrees, index_x, index_y);
-			int index = nautonomous_occupancy_grid.info.width * index_y + index_x;
-			if (index >= 0 && index <= (nautonomous_occupancy_grid.info.height*nautonomous_occupancy_grid.info.width)) {
-				int value = nautonomous_occupancy_grid.data[index];
-				//ROS_INFO("index %d value %d", index, value);
+		// if(nautonomous_occupancy_grid.info.height){
+		// 	int index_x = (position_x - nautonomous_occupancy_grid.info.origin.position.x)
+		// 					/ nautonomous_occupancy_grid.info.resolution;
+		// 	int index_y = (position_y - nautonomous_occupancy_grid.info.origin.position.y)
+		// 			/ nautonomous_occupancy_grid.info.resolution;
+		// 	//ROS_INFO("(%4.2f, %4.2f | %4.2f [%4.2f]) is index (%d, %d)", x, y, th, degrees, index_x, index_y);
+		// 	int index = nautonomous_occupancy_grid.info.width * index_y + index_x;
+		// 	if (index >= 0 && index <= (nautonomous_occupancy_grid.info.height*nautonomous_occupancy_grid.info.width)) {
+		// 		int value = nautonomous_occupancy_grid.data[index];
+		// 		//ROS_INFO("index %d value %d", index, value);
 
-				if (value > 50) {
-					ROS_INFO("Undoing position change");
-					//undo position change
-					position_x -= delta_x;
-					position_y -= delta_y;
-					theta -= delta_theta;
-				}
-			}
-		}
+		// 		if (value > 50) {
+		// 			ROS_INFO("Undoing position change");
+		// 			//undo position change
+		// 			position_x -= delta_x;
+		// 			position_y -= delta_y;
+		// 			theta -= delta_theta;
+		// 		}
+		// 	}
+		// }
 
 		//since all odometry is 6DOF we'll need a quaternion created from yaw
 		geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(
