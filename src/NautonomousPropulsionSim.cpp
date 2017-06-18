@@ -24,7 +24,8 @@ double theta = 0.0;
  *\param geometry_msgs::Twist twist
  *\return 
  */
-void propulsionCallback(const geometry_msgs::Twist::ConstPtr& twist) {
+void propulsionCallback(const geometry_msgs::Twist::ConstPtr& twist) {	
+	//ROS_INFO("propulsion callback %f", twist->linear.x);
 	velocity_x = twist->linear.x;
 	velocity_y = twist->linear.y;
 	velocity_theta = twist->angular.z;
@@ -117,18 +118,18 @@ int main(int argc, char **argv) {
 
 		//x and y to index the occupancy grid map.
 		if(nautonomous_occupancy_grid.info.height){
-			int index_x = nautonomous_occupancy_grid.info.height
-					- (abs(position_x + nautonomous_occupancy_grid.info.origin.position.x)
-							/ nautonomous_occupancy_grid.info.resolution);
-			int index_y = ((position_y - nautonomous_occupancy_grid.info.origin.position.y)
-					/ nautonomous_occupancy_grid.info.resolution);
+			int index_x = (position_x - nautonomous_occupancy_grid.info.origin.position.x)
+							/ nautonomous_occupancy_grid.info.resolution;
+			int index_y = (position_y - nautonomous_occupancy_grid.info.origin.position.y)
+					/ nautonomous_occupancy_grid.info.resolution;
 			//ROS_INFO("(%4.2f, %4.2f | %4.2f [%4.2f]) is index (%d, %d)", x, y, th, degrees, index_x, index_y);
-			int index = nautonomous_occupancy_grid.info.height * index_y + index_x;
+			int index = nautonomous_occupancy_grid.info.width * index_y + index_x;
 			if (index >= 0 && index <= (nautonomous_occupancy_grid.info.height*nautonomous_occupancy_grid.info.width)) {
 				int value = nautonomous_occupancy_grid.data[index];
 				//ROS_INFO("index %d value %d", index, value);
 
 				if (value > 50) {
+					ROS_INFO("Undoing position change");
 					//undo position change
 					position_x -= delta_x;
 					position_y -= delta_y;
