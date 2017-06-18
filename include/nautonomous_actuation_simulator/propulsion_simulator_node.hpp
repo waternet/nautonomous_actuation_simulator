@@ -13,6 +13,7 @@
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
 #include <nav_msgs/OccupancyGrid.h>
+#include <geometry_msgs/Pose2D.h>
 
 double delta_time;
 
@@ -50,6 +51,9 @@ void publishTransform(tf::TransformBroadcaster transform_broadcaster);
 void publishOdometry();
 
 void simulatePropulsion(ros::NodeHandle n, tf::TransformBroadcaster transform_broadcaster);
+
+
+void positionCallback(const geometry_msgs::Pose2D::ConstPtr& pose2d);
 
 #endif /* PROPULSIONSIMULATORNODE_HPP_ */
 

@@ -2,6 +2,7 @@
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
 #include <nav_msgs/OccupancyGrid.h>
+#include <geometry_msgs/Pose2D.h>
 
 nav_msgs::OccupancyGrid nautonomous_occupancy_grid;
 
@@ -12,6 +13,11 @@ double velocity_theta = 0;
 double disturbance_x = 0;
 double disturbance_y = 0;
 double disturbance_theta = 0;
+
+//Position of the robot
+double position_x = 0.0;	//629267.0;
+double position_y = 0.0;	//5807159.0;
+double theta = 0.0;
 
 /**
  *\brief If the propulsion topic arrives, read message and set the velocity x, y, th for the robot.
@@ -41,6 +47,12 @@ void mapCallback(const nav_msgs::OccupancyGrid::ConstPtr& occupancy) {
 	nautonomous_occupancy_grid.info = occupancy->info;
 }
 
+void positionCallback(geometry_msgs::Pose2DPtr pose2d) {
+	position_x = pose2d->x;
+	position_y = pose2d->y;
+	theta = pose2d->theta;
+}
+
 /**
  *\brief Main for propulsion_sim node. Subscribes and advertise topics. Constant updating map 
  *\param
@@ -61,20 +73,18 @@ int main(int argc, char **argv) {
 
 	ros::Subscriber mapSubscriber = n.subscribe("/map", 10, mapCallback);
 
+	ros::Subscriber positionSubscriber = n.subscribe("nautonomous_propulsion_sim/initial_position", 10, positionCallback);
+
 	ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("/odom_combined", 10); //odom_combined
 
 	tf::TransformBroadcaster odom_broadcaster;
-
-	//Position of the robot
-	double position_x = 0.0;//629267.0;
-	double position_y = 0.0;//5807159.0;
-	double theta = 0.0;
 
 	ros::Time current_time, last_time;
 	current_time = ros::Time::now();
 	last_time = ros::Time::now();
 
-    	ros::Rate r(15);
+    ros::Rate r(15);
+	
 	while (n.ok()) {
 
 		ros::spinOnce();               /// check for incoming messages
@@ -101,6 +111,7 @@ int main(int argc, char **argv) {
 		position_x += delta_x;
 		position_y += delta_y;
 		theta += delta_theta;
+		
 		//ROS_INFO("pos (%4.2f, %4.2f | %4.2f)", position_x, position_y, theta);
 		double degrees = (theta * 180.0 / M_PI);
 
