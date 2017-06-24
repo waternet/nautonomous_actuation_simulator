@@ -1,4 +1,4 @@
-# nautonomous actuation simulator {#nautonomous_actuation_simulator}
+# nautonomous pose simulator {#nautonomous_pose_simulator}
 
 Package used for simulating propulsion for e.g. on the map. 
 
