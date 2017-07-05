@@ -62,23 +62,25 @@ void positionCallback(geometry_msgs::Pose2DPtr pose2d) {
 
 int main(int argc, char **argv) {
 
-	ros::init(argc, argv, "nautonomous_propulsion_sim");
+	ros::init(argc, argv, "nautonomous_propulsion_simulator");
 
 	ros::NodeHandle n;
-	
+	ros::NodeHandle n_private;
+		
 	//Topics to subscribe to, multiplexed propulsion and the dimensions of the map.
 	ros::Subscriber propulsionSubscriber = n.subscribe(
-			"/multiplexed_propulsion", 10, propulsionCallback);
+			"twist_topic", 10, propulsionCallback);
 	ros::Subscriber disturbanceSubscriber = n.subscribe(
-			"/wind", 10, disturbanceCallback);
+			"disturbance_topic", 10, disturbanceCallback);
 
-	ros::Subscriber mapSubscriber = n.subscribe("/map", 10, mapCallback);
+	ros::Subscriber mapSubscriber = n.subscribe("map_topic", 10, mapCallback);
 
-	ros::Subscriber positionSubscriber = n.subscribe("nautonomous_propulsion_sim/initial_position", 10, positionCallback);
+	ros::Subscriber positionSubscriber = n.subscribe("initial_position_topic", 10, positionCallback);	
 
-	ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("/odom_combined", 10); //odom_combined
+	ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("odom_combined_topic", 10); //odom_combined
 
 	tf::TransformBroadcaster odom_broadcaster;
+
 
 	ros::Time current_time, last_time;
 	current_time = ros::Time::now();
@@ -145,7 +147,7 @@ int main(int argc, char **argv) {
 		//first, we'll publish the transform over tf
 		geometry_msgs::TransformStamped odom_trans;
 		odom_trans.header.stamp = current_time;
-		odom_trans.header.frame_id = "odom_combined";
+		odom_trans.header.frame_id = "odom";
 		odom_trans.child_frame_id = "base_link";
 
 		odom_trans.transform.translation.x = position_x;
@@ -159,7 +161,7 @@ int main(int argc, char **argv) {
 		//next, we'll publish the odometry message over ROS
 		nav_msgs::Odometry odom;
 		odom.header.stamp = current_time; 
-		odom.header.frame_id = "odom_combined"; //odom_combined
+		odom.header.frame_id = "odom"; //odom_combined
 
 		//set the position
 		odom.pose.pose.position.x = position_x;
