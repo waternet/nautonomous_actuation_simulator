@@ -94,9 +94,9 @@ int main(int argc, char **argv) {
 		current_time = ros::Time::now();
 
 		/// compute odometry in a typical way given the velocities of the robot
-		double dt = (current_time - last_time).toSec();
-		double delta_propulsion_x = (velocity_x * cos(theta) - velocity_y * sin(theta)) * dt;
-		double delta_propulsion_y = (velocity_x * sin(theta) + velocity_y * cos(theta)) * dt;
+		double dt 					= (current_time - last_time).toSec();
+		double delta_propulsion_x 	= (velocity_x * cos(theta) - velocity_y * sin(theta)) * dt;
+		double delta_propulsion_y 	= (velocity_x * sin(theta) + velocity_y * cos(theta)) * dt;
 
 		double delta_theta = velocity_theta * dt;
 
@@ -111,9 +111,9 @@ int main(int argc, char **argv) {
 		double delta_y = delta_propulsion_y + delta_disturbance_y;
 
 		//ROS_INFO("delta (%4.2f, %4.2f | %4.2f)", delta_x, delta_y, delta_theta);
-		position_x += delta_x;
-		position_y += delta_y;
-		theta += delta_theta;
+		position_x 	+= delta_x;
+		position_y 	+= delta_y;
+		theta 		+= delta_theta;
 		
 		//ROS_INFO("pos (%4.2f, %4.2f | %4.2f)", position_x, position_y, theta);
 		double degrees = (theta * 180.0 / M_PI);
@@ -141,13 +141,12 @@ int main(int argc, char **argv) {
 		// }
 
 		//since all odometry is 6DOF we'll need a quaternion created from yaw
-		geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(
-				theta);
+		geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(theta);
 
 		//first, we'll publish the transform over tf
 		geometry_msgs::TransformStamped odom_trans;
 		odom_trans.header.stamp = current_time;
-		odom_trans.header.frame_id = "odom";
+		odom_trans.header.frame_id = "odom_combined";
 		odom_trans.child_frame_id = "base_link";
 
 		odom_trans.transform.translation.x = position_x;
@@ -161,7 +160,7 @@ int main(int argc, char **argv) {
 		//next, we'll publish the odometry message over ROS
 		nav_msgs::Odometry odom;
 		odom.header.stamp = current_time; 
-		odom.header.frame_id = "odom"; //odom_combined
+		odom.header.frame_id = "odom_combined"; //odom_combined
 
 		//set the position
 		odom.pose.pose.position.x = position_x;
@@ -178,6 +177,7 @@ int main(int argc, char **argv) {
 		//publish the message
 		odom_pub.publish(odom);
 
+		// Time
 		last_time = current_time;
 		r.sleep();
 	}
