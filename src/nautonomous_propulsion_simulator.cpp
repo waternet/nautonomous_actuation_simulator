@@ -161,7 +161,7 @@ int main(int argc, char **argv) {
 		//next, we'll publish the odometry message over ROS
 		nav_msgs::Odometry odom;
 		odom.header.stamp = current_time; 
-		odom.header.frame_id = "odom"; //odom_combined
+		odom.header.frame_id = "odom"; //odom
 
 		//set the position
 		odom.pose.pose.position.x = position_x;
